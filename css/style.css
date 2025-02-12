@@ -1,0 +1,66 @@
+html {
+    font-size: 16px;
+    font-family: "Asap", sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+.navbar {
+    width: 100%;
+    height: auto;
+    padding-right: 1rem;
+    padding-left: .5rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    display: flex;
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center;
+}
+
+.navbar-title {
+    font-size: 1.25rem;
+    padding: .5rem;
+}
+
+.navbar-list {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: black;
+    padding: .5rem;
+}
+
+.box {
+    margin: 20px;
+}
+
+.main-box {
+    height: 500px;
+}
+
+.gallery-box {
+    height: 500px;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.table td {
+    padding: .25rem;
+}
+
+.table img {
+    width: 100%;
+    height: 100%;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
