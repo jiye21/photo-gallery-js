@@ -44,7 +44,7 @@ body {
 }
 
 .main-box {
-    height: 420px;
+    height: 70vh;
     display: flex;
     justify-content: left;
 }
@@ -69,7 +69,7 @@ body {
 }
 
 .preview {
-    width: 70%;
+    width: 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -79,13 +79,14 @@ body {
 .recent-photo, .liked-photo {
     width: 100%;
     height: auto;
-    margin-bottom: .5rem;
+    margin-bottom: 1rem;
 }
 
 .main-table {
     width: 100%;
     height: auto;
     border-spacing: 0;
+    border-collapse: collapse;
 }
 
 .main-table td {
@@ -106,6 +107,10 @@ body {
     text-align: center;
     font-size: 2rem;
     color: #2D3E4E;
+}
+
+p {
+    margin: 1rem;
 }
 
 .table {
@@ -168,6 +173,16 @@ body {
     display: none;
     width: min(5%, 5vh);
     aspect-ratio: 1 / 1;
+}
+
+#empty-heart, #red-heart {
+    display: none;
+    width: min(5%, 5vh);
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 150;
 }
 
 *, ::after, ::before {

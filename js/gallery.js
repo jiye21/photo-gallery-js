@@ -5,13 +5,17 @@ const cancelBtn = document.getElementById("cancelBtn");
 const img = document.createElement("img");
 const left = document.getElementById("left-arrow");
 const right = document.getElementById("right-arrow");
+const emptyHeart = document.getElementById("empty-heart");
+const redHeart = document.getElementById("red-heart");
 
 var currentIndex;
 var recentIndex;
+var likeIndex;
 
 const MAX_NUMBER = 4;
 
 const recentTds = document.querySelectorAll(".recent-photos");
+const likedTds = document.querySelectorAll(".liked-photos");
 
 function showImage(newImg){
     img.src = newImg.getAttribute("src");
@@ -22,6 +26,29 @@ function showImage(newImg){
     left.style.display = "block";
     right.style.display = "block";
     modal.style.display = "flex";
+    
+    emptyHeart.style.display = "block";
+    redHeart.style.display = "none";
+
+    let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
+    likedImages.forEach((el)=>{
+        if(currentIndex === el){
+            redHeart.style.display = "block";
+            emptyHeart.style.display = "none";
+        }
+        else if(recentIndex !== undefined){
+            let clickedImages = JSON.parse(localStorage.getItem("recentImages"));
+            if(clickedImages[recentIndex] === el){
+                redHeart.style.display = "block";
+                emptyHeart.style.display = "none";
+            }
+        }
+        else if(likeIndex !== undefined){
+            redHeart.style.display = "block";
+            emptyHeart.style.display = "none";
+        }
+    });
+
 }
 
 
@@ -37,8 +64,27 @@ function displayRecentImages(){
             el.appendChild(img);
 
             img.addEventListener("click", function (){
-                showImage(this);
                 recentIndex = idx;
+                showImage(this);
+            });
+        }
+    });
+}
+
+function displayLikedImages(){
+    likedTds.forEach((el, idx) => {
+        el.innerHTML="";
+
+        let img = document.createElement("img");
+        let likedImages = JSON.parse(localStorage.getItem("likedImages"));
+        if(likedImages !== null && idx >= 0 && idx < likedImages.length) {
+            img.src = imgEls[likedImages[idx]].getAttribute("src");
+            img.style.display = "block";
+            el.appendChild(img);
+
+            img.addEventListener("click", function (){
+                likeIndex = idx;
+                showImage(this);
             });
         }
     });
@@ -46,9 +92,9 @@ function displayRecentImages(){
 
 imgEls.forEach((el, idx) => {
     el.addEventListener("click", function() {
+        currentIndex = idx;
         showImage(this);
 
-        currentIndex = idx;
 
         let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
         clickedImages = clickedImages.filter((el) => el !== idx);
@@ -70,6 +116,7 @@ cancelBtn.addEventListener("click", function() {
     modal.style.display = "none";
     currentIndex = undefined;
     recentIndex = undefined;
+    likeIndex = undefined;
 })
 
 left.addEventListener("click", function() {
@@ -97,4 +144,53 @@ right.addEventListener("click", function() {
     }
 })
 
-window.onload = displayRecentImages;
+// 처음 좋아요를 누를 경우, 좋아요 추가
+emptyHeart.addEventListener("click", function(){
+  let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
+  if(currentIndex !== undefined){
+      likedImages.unshift(currentIndex);
+      if(likedImages.length > MAX_NUMBER) {
+          likedImages.pop();
+      }
+  }
+  else if(recentIndex !== undefined){
+      likedImages.unshift(recentIndex);
+      if(likedImages.length > MAX_NUMBER) {
+          likedImages.pop();
+      }
+  }
+  localStorage.setItem("likedImages", JSON.stringify(likedImages));
+  
+  // 좋아요 목록 갱신
+  displayLikedImages();
+})
+
+// 이미 좋아요 누른 사진일 경우, 좋아요 삭제
+redHeart.addEventListener("click", function(){
+    let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
+    if(currentIndex !== undefined){
+        likedImages.forEach((el,idx)=>{
+            if(el === currentIndex){
+                likedImages.splice(idx, 1);
+            }
+        })
+    }
+    else if(recentIndex !== undefined){
+        let clickedImages = JSON.parse(localStorage.getItem("recentImages"));
+        likedImages.forEach((el,idx)=>{
+            if(el === clickedImages[recentIndex]){
+                likedImages.splice(idx, 1);
+            }
+        })
+    }
+    localStorage.setItem("likedImages", JSON.stringify(likedImages));
+
+    // 좋아요 목록 갱신
+    displayLikedImages();
+})
+
+
+window.addEventListener("load", function() {
+    displayRecentImages();
+    displayLikedImages();
+});
