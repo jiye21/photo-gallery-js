@@ -12,7 +12,6 @@ imgEls.forEach((el, idx) => {
     el.addEventListener("click", function() {
         img.src = this.getAttribute("src");
         img.style.display = "block";
-        img.style.height = "100%";
         left.insertAdjacentElement("afterend", img);
 
         cancelBtn.style.display = "block";
