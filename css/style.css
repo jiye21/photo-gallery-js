@@ -1,6 +1,7 @@
 html {
     font-size: 16px;
     font-family: "Asap", sans-serif;
+    background-color: #E8ECEB;
 }
 
 body {
@@ -44,12 +45,67 @@ body {
 
 .main-box {
     height: 420px;
+    display: flex;
+    justify-content: left;
+}
+
+.profile {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
+.profile img {
+    width: 70%;
+    aspect-ratio: 1/ 1;
+    display: block;
+}
+
+.user-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.preview {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.25rem;
+}
+
+.recent-photo, .liked-photo {
+    width: 100%;
+    height: auto;
+    margin-bottom: .5rem;
+}
+
+.main-table {
+    width: 100%;
+    height: auto;
+    border-spacing: 0;
+}
+
+.main-table td {
+    width: 25%;
+    padding: .15rem;
+    vertical-align: top;
+}
+
+.main-table img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
 }
 
 .gallery-box {
     height: auto;
     text-align: center;
     font-size: 2rem;
+    color: #2D3E4E;
 }
 
 .table {
