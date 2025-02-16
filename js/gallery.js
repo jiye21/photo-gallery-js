@@ -120,27 +120,32 @@ cancelBtn.addEventListener("click", function() {
 })
 
 left.addEventListener("click", function() {
-    if(currentIndex !== undefined && currentIndex > 0)
-    {
+    if(currentIndex !== undefined && currentIndex > 0) {
         img.src = imgEls[--currentIndex].getAttribute("src");
     }
-    if(recentIndex !== undefined && recentIndex > 0)
-    {
+    if(recentIndex !== undefined && recentIndex > 0) {
         let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
         img.src = imgEls[clickedImages[--recentIndex]].getAttribute("src");
+    }
+    if(likeIndex !== undefined && likeIndex > 0) {
+        let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
+        img.src = imgEls[likedImages[--likeIndex]].getAttribute("src");
     }
 })
 
 right.addEventListener("click", function() {
-    if(currentIndex !== undefined && currentIndex < imgEls.length-1)
-    {
+    if(currentIndex !== undefined && currentIndex < imgEls.length-1) {
         img.src = imgEls[++currentIndex].getAttribute("src");
     }
 
     let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
-    if(recentIndex !== undefined && recentIndex < clickedImages.length-1)
-    {
+    if(recentIndex !== undefined && recentIndex < clickedImages.length-1) {
         img.src = imgEls[clickedImages[++recentIndex]].getAttribute("src");
+    }
+
+    let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
+    if(likeIndex !== undefined && likeIndex < likedImages.length-1) {
+        img.src = imgEls[likedImages[++likeIndex]].getAttribute("src");
     }
 })
 
@@ -160,7 +165,9 @@ emptyHeart.addEventListener("click", function(){
       }
   }
   localStorage.setItem("likedImages", JSON.stringify(likedImages));
-  
+  redHeart.style.display = "block";
+  emptyHeart.style.display = "none";
+
   // 좋아요 목록 갱신
   displayLikedImages();
 })
@@ -183,7 +190,16 @@ redHeart.addEventListener("click", function(){
             }
         })
     }
+    else if(likeIndex !== undefined){
+        likedImages.forEach((el,idx)=>{
+            if(el === likedImages[likeIndex]){
+                likedImages.splice(idx, 1);
+            }
+        })
+    }
     localStorage.setItem("likedImages", JSON.stringify(likedImages));
+    emptyHeart.style.display = "block";
+    redHeart.style.display = "none";
 
     // 좋아요 목록 갱신
     displayLikedImages();
