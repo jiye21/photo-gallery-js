@@ -26,13 +26,19 @@
 
 <div class="box main-box">
     <div class="profile">
-        <img src="../img/profile.png" alt="profile">
+        <img src="../img/profile.png" id="profile" alt="profile">
         <p class="user-name">
             Jiye
         </p>
         <p class="profile-content">
             안녕하세요!
         </p>
+        <p class="upload-photo">
+            사진 업로드:
+        </p>
+        <form name="upload-form">
+            <input type="file" id="profile-input" accept="image/*">
+        </form>
     </div>
     <div class="preview">
         <div class="recent-photo">
@@ -63,11 +69,17 @@
                 </tr>
             </table>
         </div>
+        <p class="upload-photo">
+            사진 업로드:
+        </p>
+        <form name="upload-form">
+            <input type="file" id="photo-input" accept="image/*">
+        </form>
     </div>
 </div>
 <div class="box gallery-box">
     <p>My Gallery</p>
-    <table class="table">
+    <table class="gallery-table">
         <tr>
             <td><img class="pic" src="../img/01.jpg" alt="img01"></td>
             <td><img class="pic" src="../img/02.jpg" alt="img02"></td>
@@ -103,6 +115,7 @@
         <img id="red-heart" src="../img/red-heart.png" alt="red-heart">
     </div>
 </div>
+
 
 <script src="../js/main-page.js"></script>
 <script src="../js/gallery.js"></script>

@@ -10,12 +10,32 @@ const redHeart = document.getElementById("red-heart");
 
 var currentIndex;
 var recentIndex;
-var likeIndex;
+var likedIndex;
 
 const MAX_NUMBER = 4;
 
 const recentTds = document.querySelectorAll(".recent-photos");
 const likedTds = document.querySelectorAll(".liked-photos");
+
+const fileInput = document.getElementById("photo-input");
+const galleryTable = document.querySelector(".gallery-table");
+
+const uploadedImage = JSON.parse(localStorage.getItem("uploadedImages")) || [];
+if(uploadedImage.length !== 0){
+    const profile = document.getElementById("profile");
+    profile.src = uploadedImage;
+
+    profile.addEventListener("click", function(){
+        img.src = this.getAttribute("src");
+        img.style.display = "block";
+        left.insertAdjacentElement("afterend", img);
+
+        cancelBtn.style.display = "block";
+        modal.style.display = "flex";
+    })
+}
+
+const profileInput = document.getElementById("profile-input");
 
 function showImage(newImg){
     img.src = newImg.getAttribute("src");
@@ -43,7 +63,7 @@ function showImage(newImg){
                 emptyHeart.style.display = "none";
             }
         }
-        else if(likeIndex !== undefined){
+        else if(likedIndex !== undefined){
             redHeart.style.display = "block";
             emptyHeart.style.display = "none";
         }
@@ -58,8 +78,9 @@ function displayRecentImages(){
 
         let img = document.createElement("img");
         let clickedImages = JSON.parse(localStorage.getItem("recentImages"));
-        if(clickedImages !== null && idx >= 0 && idx < clickedImages.length) {
+        if(clickedImages !== null && clickedImages[idx] < imgEls.length) {
             img.src = imgEls[clickedImages[idx]].getAttribute("src");
+
             img.style.display = "block";
             el.appendChild(img);
 
@@ -83,7 +104,7 @@ function displayLikedImages(){
             el.appendChild(img);
 
             img.addEventListener("click", function (){
-                likeIndex = idx;
+                likedIndex = idx;
                 showImage(this);
             });
         }
@@ -116,20 +137,20 @@ cancelBtn.addEventListener("click", function() {
     modal.style.display = "none";
     currentIndex = undefined;
     recentIndex = undefined;
-    likeIndex = undefined;
+    likedIndex = undefined;
 })
 
 left.addEventListener("click", function() {
-    if(currentIndex !== undefined && currentIndex > 0) {
+    if(currentIndex !== undefined && currentIndex > 0){
         img.src = imgEls[--currentIndex].getAttribute("src");
     }
     if(recentIndex !== undefined && recentIndex > 0) {
         let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
         img.src = imgEls[clickedImages[--recentIndex]].getAttribute("src");
     }
-    if(likeIndex !== undefined && likeIndex > 0) {
+    if(likedIndex !== undefined && likedIndex > 0) {
         let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
-        img.src = imgEls[likedImages[--likeIndex]].getAttribute("src");
+        img.src = imgEls[likedImages[--likedIndex]].getAttribute("src");
     }
 })
 
@@ -144,8 +165,8 @@ right.addEventListener("click", function() {
     }
 
     let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
-    if(likeIndex !== undefined && likeIndex < likedImages.length-1) {
-        img.src = imgEls[likedImages[++likeIndex]].getAttribute("src");
+    if(likedIndex !== undefined && likedIndex < likedImages.length-1) {
+        img.src = imgEls[likedImages[++likedIndex]].getAttribute("src");
     }
 })
 
@@ -190,9 +211,9 @@ redHeart.addEventListener("click", function(){
             }
         })
     }
-    else if(likeIndex !== undefined){
+    else if(likedIndex !== undefined){
         likedImages.forEach((el,idx)=>{
-            if(el === likedImages[likeIndex]){
+            if(el === likedImages[likedIndex]){
                 likedImages.splice(idx, 1);
             }
         })
@@ -204,6 +225,74 @@ redHeart.addEventListener("click", function(){
     // 좋아요 목록 갱신
     displayLikedImages();
 })
+
+// FileReader 객체로 업로드한 이미지 확인
+fileInput.addEventListener("change", function (event){
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+        const imgEl = document.createElement("img");
+
+        imgEl.src = reader.result;
+
+        // 업로드한 이미지는 최근 본 사진 목록에 표시되지 않음
+        imgEl.addEventListener("click", function(){
+            showImage(this);
+        })
+
+        // 업로드한 이미지 갤러리에 배치
+        displayImage(imgEl);
+    }
+    reader.readAsDataURL(file);
+})
+
+
+profileInput.addEventListener("change", function (event){
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+        const profile = document.getElementById("profile");
+        const uploadedImages = [];
+
+        uploadedImages.push(reader.result);
+        try {
+            localStorage.setItem("uploadedImages", JSON.stringify(uploadedImages));
+            profile.src = reader.result;
+        } catch (e) {
+            if (e.name === "QuotaExceededError") {
+                alert("이미지 크기가 너무 커 프로필 이미지 변경에 실패하였습니다. ");
+            }
+        }
+
+
+        // 프로필 사진 크게보기
+        profile.addEventListener("click", function(){
+            img.src = this.getAttribute("src");
+            img.style.display = "block";
+            left.insertAdjacentElement("afterend", img);
+
+            cancelBtn.style.display = "block";
+            modal.style.display = "flex";
+        })
+    }
+    reader.readAsDataURL(file);
+})
+
+function displayImage(img){
+    const tdEl = document.createElement("td");
+    const tdEls = document.querySelectorAll(".gallery-table td");
+    tdEl.appendChild(img);
+
+    // 행이 다 찼다면 행을 새로 생성 후 이미지 추가
+    if(tdEls.length % 4 === 0){
+        const trEl = document.createElement("tr");
+        trEl.appendChild(tdEl)
+        galleryTable.appendChild(trEl);
+    }
+    else{
+        tdEls[tdEls.length-1].insertAdjacentElement("afterend",tdEl);
+    }
+}
 
 
 window.addEventListener("load", function() {
