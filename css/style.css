@@ -49,6 +49,11 @@ body {
     justify-content: left;
 }
 
+p {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
 .profile {
     width: 30%;
     height: 100%;
@@ -74,10 +79,6 @@ body {
     font-weight: bold;
 }
 
-.upload-photo {
-    margin-bottom: .5rem;
-}
-
 .preview {
     width: 50%;
     height: 100%;
@@ -90,6 +91,10 @@ body {
     width: 100%;
     height: auto;
     margin-bottom: 1rem;
+}
+
+.preview form{
+    font-size: 1rem;
 }
 
 .main-table {
@@ -117,11 +122,6 @@ body {
     text-align: center;
     font-size: 2rem;
     color: #2D3E4E;
-}
-
-p {
-    margin-top: .5rem;
-    margin-bottom: .5rem;
 }
 
 .gallery-table {
@@ -167,7 +167,7 @@ p {
 
 #modalBox img {
     max-width: 80%;
-    max-height: 80%;
+    max-height: 90%;
     aspect-ratio: auto;
 }
 

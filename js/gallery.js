@@ -20,6 +20,7 @@ const likedTds = document.querySelectorAll(".liked-photos");
 const fileInput = document.getElementById("photo-input");
 const galleryTable = document.querySelector(".gallery-table");
 
+// 프로필 사진 불러오기
 const uploadedImage = JSON.parse(localStorage.getItem("uploadedImages")) || [];
 if(uploadedImage.length !== 0){
     const profile = document.getElementById("profile");
@@ -36,6 +37,9 @@ if(uploadedImage.length !== 0){
 }
 
 const profileInput = document.getElementById("profile-input");
+
+const allImages = [...imgEls];
+
 
 function showImage(newImg){
     img.src = newImg.getAttribute("src");
@@ -142,7 +146,7 @@ cancelBtn.addEventListener("click", function() {
 
 left.addEventListener("click", function() {
     if(currentIndex !== undefined && currentIndex > 0){
-        img.src = imgEls[--currentIndex].getAttribute("src");
+        img.src = allImages[--currentIndex].getAttribute("src");
     }
     if(recentIndex !== undefined && recentIndex > 0) {
         let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
@@ -155,8 +159,8 @@ left.addEventListener("click", function() {
 })
 
 right.addEventListener("click", function() {
-    if(currentIndex !== undefined && currentIndex < imgEls.length-1) {
-        img.src = imgEls[++currentIndex].getAttribute("src");
+    if(currentIndex !== undefined && currentIndex < allImages.length-1) {
+        img.src = allImages[++currentIndex].getAttribute("src");
     }
 
     let clickedImages = JSON.parse(localStorage.getItem("recentImages")) || [];
@@ -173,21 +177,25 @@ right.addEventListener("click", function() {
 // 처음 좋아요를 누를 경우, 좋아요 추가
 emptyHeart.addEventListener("click", function(){
   let likedImages = JSON.parse(localStorage.getItem("likedImages")) || [];
-  if(currentIndex !== undefined){
+  if(currentIndex !== undefined && currentIndex < imgEls.length){
       likedImages.unshift(currentIndex);
       if(likedImages.length > MAX_NUMBER) {
           likedImages.pop();
       }
+
+      redHeart.style.display = "block";
+      emptyHeart.style.display = "none";
   }
   else if(recentIndex !== undefined){
       likedImages.unshift(recentIndex);
       if(likedImages.length > MAX_NUMBER) {
           likedImages.pop();
       }
+
+      redHeart.style.display = "block";
+      emptyHeart.style.display = "none";
   }
   localStorage.setItem("likedImages", JSON.stringify(likedImages));
-  redHeart.style.display = "block";
-  emptyHeart.style.display = "none";
 
   // 좋아요 목록 갱신
   displayLikedImages();
@@ -234,14 +242,15 @@ fileInput.addEventListener("change", function (event){
         const imgEl = document.createElement("img");
 
         imgEl.src = reader.result;
-
         // 업로드한 이미지는 최근 본 사진 목록에 표시되지 않음
         imgEl.addEventListener("click", function(){
+            currentIndex = allImages.length - 1;
             showImage(this);
         })
 
         // 업로드한 이미지 갤러리에 배치
         displayImage(imgEl);
+        allImages.push(imgEl);
     }
     reader.readAsDataURL(file);
 })
