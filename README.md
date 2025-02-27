@@ -3,6 +3,11 @@
 https://jiye21.github.io/photo-gallery-js/
 
 ![Image](https://github.com/user-attachments/assets/8efe7369-eed3-4759-9b2d-7f42f24773b1)
+## 개발 환경
+- 언어: HTML/CSS/JavaScript
+- 개발 IDE: ItelliJ IDEA
+- OS: Windows
+
 ## 주요 기능
 > **프로필 사진 변경**
 - 프로필 영역 하단의 버튼으로 프로필 사진을 변경할 수 있음
